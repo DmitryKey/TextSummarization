@@ -6,9 +6,10 @@ from gensim import models, corpora
 from gensim.models import Phrases
 import numpy as np
 
-
+print("TopicModel::Init")
 wnl = WordNetLemmatizer()
 lemmatizer = wnl.lemmatize
+print("Done")
 
 def tokenizer(document):
     """
@@ -234,27 +235,27 @@ class TopicModel(object):
         
         # calculate token frequencies to exclude low and high frequency tokens
         freqs = self.getFrequencies(tokens)
-        low_freq_tokens = set(x[0] for x in freqs.iteritems() if x[1] < min_word_count)
+        low_freq_tokens = set(x[0] for x in freqs.items() if x[1] < min_word_count)
         high_freq_tokens = [word[0] for word in freqs.most_common(top_most_common_words)]
         
         tokens =  [[t for t in tkn if t not in low_freq_tokens] for tkn in tokens]
         tokens =  [[t for t in tkn if t not in high_freq_tokens] for tkn in tokens]
         
-        print '\nnumber of low frequency tokens pruned = {:,d}'\
-              .format(len(low_freq_tokens))
-        print 'min_word_count = {:d}, top_most_common_words = {:,d}'\
-              .format(min_word_count, top_most_common_words)
-        print 'number of high frequency tokens pruned = {:,d}'\
-              .format(len(high_freq_tokens))
-        print 'tokens = {:,d} rows'.format(len(tokens))
-        print 'text pre-processing is complete\n'
+        print('\nnumber of low frequency tokens pruned = {:,d}'\
+              .format(len(low_freq_tokens)))
+        print('min_word_count = {:d}, top_most_common_words = {:,d}'\
+              .format(min_word_count, top_most_common_words))
+        print('number of high frequency tokens pruned = {:,d}'\
+              .format(len(high_freq_tokens)))
+        print('tokens = {:,d} rows'.format(len(tokens)))
+        print('text pre-processing is complete\n')
         return tokens
 
 
     def getLDA(self, dictionary=None, corpus=None, num_topics=None, 
                random_state=None):
         # get LDA for dictionary_all and corpus_all
-        print 'computing LDA...'
+        print('computing LDA...')
         
         if dictionary is None:
             dictionary = self.dictionary
@@ -273,7 +274,7 @@ class TopicModel(object):
 
     def getDominantTopics(self, corpus, lda, num_dominant_topics=None):
         
-        print 'computing dominant topics...'
+        print('computing dominant topics...')
         if corpus is None:
             corpus = self.corpus
         if lda is None:
