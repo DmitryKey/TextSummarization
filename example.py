@@ -19,16 +19,29 @@ def getComments():
     return regulations, comments
 
 
-def main(num_topics=15):
+num_topics = 15
+
+if __name__ == "__main__":
+    print("Loading regulations and comments..")
     
     regulations, comments = getComments()
+
+    print("Done")
+ 
+    #print(regulations)
     
+    print("Building TopicModel")
     topicModel = TopicModel(num_topics)
     topicModel.fit(comments)
+    print("Done")
 
-    for docket_id, document in regulations.iteritems():
+
+    print("Summarizing documents")
+    for docket_id, document in regulations.items():
         docSummaries = DocumentSummaries(topicModel, num_dominant_topics=3, number_of_sentences=4)
         docSummaries.summarize(document)
-        print docket_id
+        print(docket_id)
         docSummaries.display()
 
+
+    print("Done")

@@ -5,10 +5,12 @@ import numpy as np
 class topicSummary(object):
 
     def __init__(self, topic_id, terms, weights, sentences):
+        print("topicSummary::Init")
         self.topic_id = topic_id
         self.terms = terms
         self.weights = weights
         self.sentences = sentences
+        print("Done")
 
     def __str__(self):
         if self.sentences is None or len(self.sentences) == 0:
@@ -39,9 +41,9 @@ def innerProduct(bow1, bow2):
         inner_product += bow1[key] * bow2[key]
     sum1 = 0.0
     sum2 = 0.0
-    for v in bow1.itervalues():
+    for v in bow1.values():
         sum1 += v*v
-    for v in bow2.itervalues():
+    for v in bow2.values():
         sum2 += v*v
     inner_product /= np.sqrt(sum1 * sum2)
     return inner_product
@@ -77,16 +79,18 @@ class DocumentSummaries(object):
     ----------
     summary_data: dictionary
 
-    
+    a
     '''
     
     def __init__(self, model, num_dominant_topics=5, number_of_sentences=5):
+        print("DocumentSummaries::Init")
         # the bigramizer should be the same object that was trained in TopicModel
         self.num_dominant_topics = num_dominant_topics
         self.number_of_sentences= number_of_sentences
         self.lda = model.lda
         self.dictionary = model.dictionary
         self.bigramizer = model.bigramizer
+        print("Done")
     
     
     def summarize(self, documents):
@@ -171,7 +175,7 @@ class DocumentSummaries(object):
                 # this is to get the dominant index only (not a list)
                 try:
                     dist = max(dist, key=lambda x: x[1])
-                except ValueError, ve:
+                except ValueError as ve:
                     continue
                 sentence_distributions.append((k, dist))
             distributions.append(sentence_distributions)
@@ -229,7 +233,7 @@ class DocumentSummaries(object):
             
             if len(sorted_by_weight) == 0:
                 if sn == len(self.distributions) - 1:
-                    print 'No results in filtered set for sentence:', sn
+                    print('No results in filtered set for sentence:', sn)
                 sn += 1
                 continue
             
@@ -266,10 +270,10 @@ class DocumentSummaries(object):
     def display(self):
         '''
         '''
-        print 'The dominant topics in descending order are:'
+        print('The dominant topics in descending order are:')
         for dtid in self.dominant_topic_ids:
-            print dtid, 
-        print ''
+            print(dtid,) 
+        print('')
         
         for k in range(self.num_dominant_topics):
             dtid = self.dominant_topic_ids[k]
@@ -279,20 +283,20 @@ class DocumentSummaries(object):
             num_terms = len(terms)
             sentences = topicSummary.sentences
             
-            print '\nTopic {:d}'.format(dtid)
-            print 'The top {:d} terms and corresponding weights are:'.format(num_terms)
+            print('\nTopic {:d}'.format(dtid))
+            print('The top {:d} terms and corresponding weights are:'.format(num_terms))
             for term, weight in zip(terms, weights):
-                print ' * {:s} ({:5.4f})'.format(term, weight)
+                print(' * {:s} ({:5.4f})'.format(term, weight))
             
-            print '\n\nThe selected sentences are:',
+            print('\n\nThe selected sentences are:',)
             n_sentences = len(sentences)
             for j in range(n_sentences):
                 item = sentences[j]
-                print '{:d},'.format(item[0]),
-            print ' '
+                print('{:d},'.format(item[0]),)
+            print(' ')
             for j in range(n_sentences):
                 item = sentences[j]
                 sentence = item[2]
-                print sentence
+                print(sentence)
             print
 
